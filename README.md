@@ -8,12 +8,12 @@ The metaheuristic framework was designed to implemented various algorithms for t
 # Settings
 1. Python recommended: Python 2.7.x on Windows, and pypy2 (a fast and compliant Python, http://pypy.org).
 2. PuLP 1.6.0 (https://pypi.org/project/PuLP/)
-3. ILOG CPLEX 12.x, cplex (CPLEX Python API)
+3. ILOG CPLEX 12.x and CPLEX Python API.
 4. Copy all the files in a directory.
 5. Run the python files in a command window, such as:
 * mip.py (solve the problem by exact method)
-* \pypy2\pypy hybrid.py (solve the problem by the hybrid method)
-* \pypy2\pypy heur.py (solve the problem by local search method)
-6. The Python files can be edited.
+* \pypy2\pypy hybrid.py (solve the problem by the hybrid method: GA+LS+SPP)
+* \pypy2\pypy heur.py (solve the problem by a local-search based metaheuristic, such as ILS, ILS-VND, VNS, SA, RRT, VND, SLS, HC)
+* The Python files can be edited (see the "Introduction_v01.pdf").
 # E-mail: yfkong@henu.edu.cn
-# Read the file Introduction for detail.
+# Read the file "Introduction_v01.pdf" for details.
