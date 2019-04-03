@@ -1,0 +1,129 @@
+How to use the algorithm framework (AFSAP)
+since April 2, 2019
+yfkong@henu.edu.cn
+
+1 System requirements 
+* Python 2.7.x on Windows, or pypy 6.0 (a fast and compliant Python, http://pypy.org);
+* Modeling tool:  PuLP 1.6.0 (https://pypi.org/project/PuLP/);
+* CPLEX (optional): ILOG CPLEX V12.x and CPLEX Python API;
+* Download the files and copy all the files in a working directory.
+
+2 Solve a problem instance in Python(or pypy) window:
+>>>import algorithm_framework_for_SAP as d
+>>>d.mip_solver="cplex"
+* "cplex" for CPLEX
+* "cbc" for Coin-CBC
+* "" for no MIP solver 
+
+>>>d.readfile("zys_13b.txt", "zys_connectivity.txt")
+Read an instance: unit file and connectivity file
+
+>>>#d.readdistance("zys_13b_dis.txt")
+Read a distance file
+
+>>>d.mipmodel() 
+Formulate the SAP model, and sovle it by CPLEX
+
+>>>d.print_solution()
+Print the final solution.
+
+>>>d.ga(13,20,300, -1, 0.7, 0.03, 1,-1) 
+Solve the problem by hybrid heuristic GA+LS+SPP
+* 13: number of facilities/service areas
+* 20: population size
+* 300: time limit in seconds
+* -1: cross over method. 0 uniform, 1 order1, 2 order2, 9 no crossover, -1 random method
+* 0.7: crossover possibility of 0.3=1-0.7
+* 0.03: mutation possibility
+* 1: use SPP modeling? 0 no, 1 yes (at the end), 2 yes (at the end, and when the best solution was not been improved for a number of consecutive iterations).
+* -1: random seed.  the start point (0-100) to generates a random number sequence,  or -1 automatically
+
+>>>d.set_solver_params(13,"ils",10,300,1,-1)
+>>>d.solve()
+Select a solver and set solver parameters:
+*13 - number of facilities/service areas
+*"ils" - algorithm such as "ils", "ilsvnd", "vns", "sa", "hc", "vnd", "rrt", "sls" 
+*10 - number of initial solutions, only for the algorithms such as ils, ilsvnd and vns
+*300 ¨C search time limit in seconds
+*1 - spp modeling, 0,1,or 2. Note that the parameter of 2 is only used for  algorithms "ils", "ilsvnd" and "vns" 
+*-1 - random seed
+
+3 Advanced topics 
+>>>import algorithm_framework_for_SAP as d
+>>>d.operators_selected=[0,1] 
+Set local search operators, 0 for one-unit-move,  1 for two-unit-move and 2 for three-unit-move. For example:
+* [0] - use one-unit-move operator only
+* [0,1] - use one-unit-move and two-unit-move operators
+* [0,1,2] - use three operator, default 
+* [1], [0,2], [1,0] or other combinations are allowed
+
+>>>d.mip_solver="cplex"
+Select a MIP solver.
+*"cbc" for Coin CBC solver, "cplex" for ILOG CPLEX solver or "" for no any MIP solver.
+
+>>>d.spatial_contiguity=0
+Set constraints on area connectivity, 0 for non-connectivity, 1 for connectivity.
+
+>>>d.initial_solution_method=[1]
+Set the initial solution methods to be used, e.g. [0], [1], [2], [0,1], [0,1,2]. 
+*0 for generalized assignment problem (GAP) modeling; 
+*1 for unit-split assignment problem modeling;
+*2 for region growth algorithm.  
+
+>>>d.SA_maxloops = 100
+>>>d.init_temperature=1.0
+Set initial temperature and maximum loops for SA search. 
+The cooling rate will be set automatically ensuring that 0.005 of temperature will be reached at the end of iterations.
+
+>>>d.spp_loops=50
+In case of SPP modeling is allowed during the search iterations, if the best solution was not been improved for 50 consecutive iterations, a SPP modeling procedure will try to select a better solution.
+This parameter should be set based on the population size and the local search operator: several times of population size, and the number of service areas to be identified. 
+
+>>>d.intial_deviation=0.5
+The deviation to be used by RRT algorithm. A worse solution with objective deviation less than 0.5/number_of_units*current_best_objective will be accepted by RRT algorithm.
+
+>>>d.readdistance("zys_13b_dis.txt")
+The geometric distance will be used by default. However, the network distance is preferred in real application. 
+All the geometric distances will be replaced by new distances defined in the distance file.
+
+
+4 Solve your problem instances
+Prepare your instance data by using GIS or any other tools. The data format for the files are shown as follows. 
+Both Tab-Delimited Text and Comma Separated Values file can be used.
+(1) Attributes of areal units
+ID	Demands	X	Y	FCadidature	FCost	FCapacity
+1	8	64201.83203	43952.77734	0	110	200
+2            5	64600.07031	43983.01953	0	0	0
+¡­¡­
+The attributes of each areal unit are listed in one text line.
+?ID: the unique ID of the areal unit  
+?Demands: the service demands in the areal unit  
+?X: x coordinate 
+?Y: y coordinate, used to calculate geometric distance.  
+?FCadidature: reserved
+?FCost: reserved
+?FCapacity: the service capacity supplied by the areal unit
+
+(2) Adjacent links
+OID            ID1            ID2            DIST
+0            1            25            0.000000
+1            2            11            0.000000
+¡­¡­
+Each line records one adjacent link between two areal units.
+?OID: the record ID
+?ID1: the ID of the first unit 
+?ID2: the ID of the second unit            
+?DIST: reserved
+
+(3) Network distances
+The distance between any two units are calculated by default. If a distance file is provided, all the distances will be replaced by the new distances. 
+OID        ID1        ID2           DIST
+0            1            25            2.459
+1            2            11            1.345
+¡­¡­
+?OID: the record ID
+?ID1: the ID of the first unit 
+?ID2: the ID of the second unit            
+?DIST: the distance between the two units
+
+The distance file can be read by function: readdistance(dfile). 
