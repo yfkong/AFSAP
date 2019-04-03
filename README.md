@@ -6,7 +6,7 @@ We have designed an algorithm framework for the service area problem (SAP). Vari
 2. Population based metaheuristics such as GA, EA;
 3. MILP modeling;
 4. Hybrid algorithms such as GA+LS+SPP, ILS+SPP, ILS+VND, VNS+SPP...
-Read the file "Introduction_v01.pdf" for details. 
+5. Read the file "Introduction_v01.pdf" for details. 
 # How to use the framework
 1. Install the software: 
 * Python 2.7.x on Windows, and pypy2 (a fast and compliant Python, http://pypy.org);
@@ -17,5 +17,5 @@ Read the file "Introduction_v01.pdf" for details.
 * python mip.py (solve the problem by CPLEX solver);
 * pypy2\pypy hybrid.py (solve the problem by the hybrid method: GA+LS+SPP);
 * pypy2\pypy heur.py (solve the problem by a population-based or multistary local-search metaheuristic, such as ILS, ILS-VND, VNS, SA, RRT, VND, SLS, HC).
-Read the manuals.txt to use the framework.
+4. Read the manuals.txt to use the framework.
 # E-mail: yfkong@henu.edu.cn
