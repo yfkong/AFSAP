@@ -19,3 +19,4 @@ We have designed an algorithm framework for the service area problem (SAP). Vari
 * pypy2\pypy heur.py (solve the problem by a population-based or multistary local-search metaheuristic, such as ILS, ILS-VND, VNS, SA, RRT, VND, SLS, HC).
 4. Read the manuals.txt to use the framework.
 # E-mail: yfkong@henu.edu.cn
+# Sponsored by the National Science Foundation of China (no. 41871307)
